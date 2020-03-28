@@ -67,9 +67,10 @@ func noRepeatSubstring(str string) int {
 	windowStart := 0
 	maxLength := 0
 	for i, v := range chars {
-		if distinct[v] > 0 {
-			if windowStart < distinct[v] {
-				windowStart = distinct[v]
+		val, found := distinct[v]
+		if found {
+			if windowStart < val {
+				windowStart = val
 			}
 		}
 		//points to the element after the itself
