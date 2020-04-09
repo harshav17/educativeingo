@@ -127,3 +127,78 @@ func replacingOnes(arr []int, k int) int {
 	}
 	return maxLength
 }
+
+//oidbcaf, abc
+func stringPermutation(str string, pattern string) bool {
+	chars := strings.Split(str, "")
+	patternChars := strings.Split(pattern, "")
+	patternDist := make(map[string]int)
+	windowStart := 0
+	matched := 0
+	for _, v := range patternChars {
+		patternDist[v]++
+	}
+	for i, v := range chars {
+		_, found := patternDist[v]
+		if found {
+			patternDist[v]--
+			if patternDist[v] == 0 {
+				matched++
+			}
+		}
+
+		if len(patternDist) == matched {
+			return true
+		}
+
+		if i >= len(patternChars)-1 {
+			c, f := patternDist[chars[windowStart]]
+			if f {
+				if c == 0 {
+					matched--
+				}
+				patternDist[chars[windowStart]]++
+			}
+			windowStart++
+		}
+	}
+	return false
+}
+
+//String="ppqp", Pattern="pq"
+func findAnagrams(str string, pattern string) []int {
+	chars := strings.Split(str, "")
+	patternChars := strings.Split(pattern, "")
+	patternDist := make(map[string]int)
+	windowStart := 0
+	matched := 0
+	result := []int{}
+	for _, v := range patternChars {
+		patternDist[v]++
+	}
+	for i, v := range chars {
+		_, found := patternDist[v]
+		if found {
+			patternDist[v]--
+			if patternDist[v] == 0 {
+				matched++
+			}
+		}
+
+		if len(patternDist) == matched {
+			result = append(result, windowStart)
+		}
+
+		if i >= len(patternChars)-1 {
+			c, f := patternDist[chars[windowStart]]
+			if f {
+				if c == 0 {
+					matched--
+				}
+				patternDist[chars[windowStart]]++
+			}
+			windowStart++
+		}
+	}
+	return result
+}

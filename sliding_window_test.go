@@ -1,6 +1,7 @@
 package educativeingo
 
 import (
+	"reflect"
 	"testing"
 )
 
@@ -164,6 +165,66 @@ func Test_replacingOnes(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := replacingOnes(tt.args.arr, tt.args.k); got != tt.want {
 				t.Errorf("replacingOnes() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_stringPermutation(t *testing.T) {
+	type args struct {
+		str     string
+		pattern string
+	}
+	tests := []struct {
+		name string
+		args args
+		want bool
+	}{
+		{
+			name: "sanity",
+			args: args{"oidbcaf", "abc"},
+			want: true,
+		},
+		{
+			name: "sanity2",
+			args: args{"bcdxabcdy", "bcdyabcdx"},
+			want: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := stringPermutation(tt.args.str, tt.args.pattern); got != tt.want {
+				t.Errorf("stringPermutation() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_findAnagrams(t *testing.T) {
+	type args struct {
+		str     string
+		pattern string
+	}
+	tests := []struct {
+		name string
+		args args
+		want []int
+	}{
+		{
+			name: "sanity",
+			args: args{"ppqp", "pq"},
+			want: []int{1, 2},
+		},
+		{
+			name: "sanity2",
+			args: args{"abbcabc", "abc"},
+			want: []int{2, 3, 4},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := findAnagrams(tt.args.str, tt.args.pattern); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("findAnagrams() = %v, want %v", got, tt.want)
 			}
 		})
 	}
