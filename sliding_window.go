@@ -105,3 +105,25 @@ func characterReplacement(str string, k int) int {
 	}
 	return maxLength
 }
+
+//0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1
+func replacingOnes(arr []int, k int) int {
+	oneCount := 0
+	windowStart := 0
+	maxLength := 1
+	for i, v := range arr {
+		if v == 1 {
+			oneCount++
+		}
+		if i-windowStart+1-oneCount > k {
+			if arr[windowStart] == 1 {
+				oneCount--
+			}
+			windowStart++
+		}
+		if maxLength < i-windowStart+1 {
+			maxLength = i - windowStart + 1
+		}
+	}
+	return maxLength
+}

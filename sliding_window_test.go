@@ -143,3 +143,28 @@ func Test_characterReplacement(t *testing.T) {
 		})
 	}
 }
+
+func Test_replacingOnes(t *testing.T) {
+	type args struct {
+		arr []int
+		k   int
+	}
+	tests := []struct {
+		name string
+		args args
+		want int
+	}{
+		{
+			name: "sanity",
+			args: args{[]int{0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1}, 2},
+			want: 6,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := replacingOnes(tt.args.arr, tt.args.k); got != tt.want {
+				t.Errorf("replacingOnes() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
