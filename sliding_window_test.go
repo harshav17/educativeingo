@@ -229,3 +229,58 @@ func Test_findAnagrams(t *testing.T) {
 		})
 	}
 }
+
+func Test_minimumWindowSubstring(t *testing.T) {
+	type args struct {
+		str     string
+		pattern string
+	}
+	tests := []struct {
+		name string
+		args args
+		want string
+	}{
+		{
+			name: "sanity2",
+			args: args{"aabdec", "abc"},
+			want: "abdec",
+		},
+		{
+			name: "sanity2",
+			args: args{"abdabca", "abc"},
+			want: "abc",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := minimumWindowSubstring(tt.args.str, tt.args.pattern); got != tt.want {
+				t.Errorf("minimumWindowSubstring() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_wordConcatenation(t *testing.T) {
+	type args struct {
+		str   string
+		words []string
+	}
+	tests := []struct {
+		name string
+		args args
+		want []int
+	}{
+		{
+			name: "sanity2",
+			args: args{"catfoxcat", []string{"cat", "fox"}},
+			want: []int{0, 3},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := wordConcatenation(tt.args.str, tt.args.words); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("wordConcatenation() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

@@ -1,6 +1,9 @@
 package educativeingo
 
-import "strings"
+import (
+	"math"
+	"strings"
+)
 
 //
 func maxSubArrayOfSizeK(k int, arr []int) int {
@@ -23,7 +26,7 @@ func maxSubArrayOfSizeK(k int, arr []int) int {
 //
 func smallestSubarrayWithGivenSum(s int, arr []int) int {
 	windowStart := 0
-	smallestSize := 1000
+	smallestSize := math.MaxInt16
 	windowSum := 0
 	for i, v := range arr {
 		windowSum += v
@@ -198,6 +201,84 @@ func findAnagrams(str string, pattern string) []int {
 				patternDist[chars[windowStart]]++
 			}
 			windowStart++
+		}
+	}
+	return result
+}
+
+//String="aabdec", Pattern="abc"
+//String="abdabca", Pattern="abc"
+func minimumWindowSubstring(str string, pattern string) string {
+	chars := strings.Split(str, "")
+	patternChars := strings.Split(pattern, "")
+	patternDist := make(map[string]int)
+	windowStart := 0
+	smallestLength := len(chars) + 1
+	subStrStart := 0
+	matched := 0
+	returnStr := ""
+	for _, v := range patternChars {
+		patternDist[v]++
+	}
+	for i, v := range chars {
+		_, found := patternDist[v]
+		if found {
+			patternDist[v]--
+			if patternDist[v] >= 0 {
+				matched++
+			}
+		}
+
+		for len(patternDist) == matched {
+			if smallestLength > i-windowStart+1 {
+				smallestLength = i - windowStart + 1
+				subStrStart = windowStart
+			}
+
+			c, f := patternDist[chars[windowStart]]
+			if f {
+				if c == 0 {
+					matched--
+				}
+				patternDist[chars[windowStart]]++
+			}
+			windowStart++
+		}
+	}
+	if smallestLength <= len(str) {
+		returnStr = str[subStrStart : subStrStart+smallestLength]
+	}
+	return returnStr
+}
+
+//String="catfoxcat", Words=["cat", "fox"]
+func wordConcatenation(str string, words []string) []int {
+	wordMap := make(map[string]int)
+	wordCount := len(words)
+	wordLength := len(words[0])
+	for _, word := range words {
+		wordMap[word]++
+	}
+	result := []int{}
+	for i := 0; i <= len(str)-wordCount*wordLength; i++ {
+		wordSeen := make(map[string]int)
+		for j := 0; j < wordCount; j++ {
+			nextWordIndex := i + j*wordLength
+
+			word := str[nextWordIndex : nextWordIndex+wordLength]
+			val, found := wordMap[word]
+			if !found {
+				break
+			}
+			wordSeen[word]++
+
+			if wordSeen[word] > val {
+				break
+			}
+
+			if j+1 == wordCount {
+				result = append(result, i)
+			}
 		}
 	}
 	return result
