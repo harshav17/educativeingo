@@ -1,6 +1,7 @@
 package educativeingo
 
 import (
+	"math"
 	"sort"
 )
 
@@ -83,4 +84,78 @@ func tripletSumToZero(arr []int) [][3]int {
 		}
 	}
 	return result
+}
+
+func tripletSumCloseToTarget(arr []int, targetSum int) int {
+	closestSum := math.MaxInt64
+	sort.Ints(arr)
+	for i, thisTarget := range arr {
+		j := i + 1
+		k := len(arr) - 1
+		for j < k {
+			res := arr[j] + arr[k] + thisTarget
+			if res == targetSum {
+				return 0
+			}
+			if res > targetSum {
+				k--
+			}
+			if res < targetSum {
+				j++
+			}
+			if targetSum > res {
+				cloSum := targetSum - res
+				if closestSum > cloSum {
+					closestSum = cloSum
+				}
+			} else {
+				cloSum := res - targetSum
+				if closestSum > cloSum {
+					closestSum = cloSum
+				}
+			}
+		}
+	}
+	return closestSum
+}
+
+//-1, 0, 2, 3 | 3 | 2
+func tripletWithSmallerSum(arr []int, target int) int {
+	sort.Ints(arr)
+	tripletCount := 0
+	for i := range arr {
+		j := i + 1
+		k := len(arr) - 1
+		for j < k {
+			sum := arr[i] + arr[j] + arr[k]
+			if sum < target {
+				tripletCount += k - j
+				j++
+			} else {
+				k--
+			}
+		}
+	}
+	return tripletCount
+}
+
+//Input: [2, 5, 3, 10], target=30
+//Output: [2], [5], [2, 5], [3], [5, 3], [10]
+func subArrayProductLessThanK(arr []int, target int) [][]int {
+	var results [][]int
+	product := 1
+	left := 0
+	for right := range arr {
+		product *= arr[right]
+		for product >= target && left < len(arr) {
+			product /= arr[left]
+			left++
+		}
+		var result []int
+		for k := right; k >= left; k-- {
+			result = append([]int{arr[k]}, result...)
+			results = append(results, result)
+		}
+	}
+	return results
 }
