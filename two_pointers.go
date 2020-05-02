@@ -159,3 +159,21 @@ func subArrayProductLessThanK(arr []int, target int) [][]int {
 	}
 	return results
 }
+
+func dutchFlag(arr []int) []int {
+	low := 0
+	high := len(arr) - 1
+	for i := 0; i <= high; {
+		if arr[i] == 0 {
+			arr[i], arr[low] = arr[low], arr[i]
+			low++
+			i++
+		} else if arr[i] == 1 {
+			i++
+		} else {
+			arr[i], arr[high] = arr[high], arr[i]
+			high--
+		}
+	}
+	return arr
+}

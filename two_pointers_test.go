@@ -186,3 +186,28 @@ func Test_subArrayProductLessThanK(t *testing.T) {
 		})
 	}
 }
+
+func Test_dutchFlag(t *testing.T) {
+	type args struct {
+		arr []int
+	}
+	tests := []struct {
+		name string
+		args args
+		want []int
+	}{
+		// TODO: Add test cases.1, 0, 2, 1, 0
+		{
+			name: "sanity2",
+			args: args{[]int{1, 0, 2, 1, 0}},
+			want: []int{0, 0, 1, 1, 2},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := dutchFlag(tt.args.arr); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("dutchFlag() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
