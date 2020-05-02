@@ -3,6 +3,7 @@ package educativeingo
 import (
 	"math"
 	"sort"
+	"strings"
 )
 
 //[1, 2, 3, 4, 6], target=6
@@ -176,4 +177,121 @@ func dutchFlag(arr []int) []int {
 		}
 	}
 	return arr
+}
+
+// Input: [4, 1, 2, -1, 1, -3], target=1
+// Output: [-3, -1, 1, 4], [-3, 1, 1, 2]
+func quadrupleSumToTarget(arr []int, target int) [][]int {
+	var results [][]int
+	sort.Ints(arr)
+	for i := 0; i < len(arr); i++ {
+		if i > 0 && arr[i] == arr[i-1] {
+			continue
+		}
+		for j := i + 1; j < len(arr); j++ {
+			if j > i+1 && arr[j] == arr[j-1] {
+				continue
+			}
+			k := j + 1
+			l := len(arr) - 1
+			for k < l {
+				sum := arr[i] + arr[j] + arr[k] + arr[l]
+				if sum == target {
+					results = append(results, []int{arr[i], arr[j], arr[k], arr[l]})
+					k++
+					l--
+					for k < l {
+						if arr[k] == arr[k-1] {
+							k++
+						}
+						if arr[l] == arr[l+1] {
+							l--
+						}
+					}
+				}
+				if sum > target {
+					l--
+				}
+				if sum < target {
+					k++
+				}
+			}
+		}
+	}
+	return results
+}
+
+func backspaceCompare(str1 string, str2 string) bool {
+	chars1 := strings.Split(str1, "")
+	chars2 := strings.Split(str2, "")
+	index1 := len(chars1) - 1
+	index2 := len(chars2) - 1
+
+	for index1 > 0 || index2 > 0 {
+		i1 := findNextValidCharIndex(chars1, index1)
+		i2 := findNextValidCharIndex(chars2, index2)
+
+		if i1 < 0 && i2 < 0 {
+			return true
+		}
+		if i1 < 0 || i2 < 0 {
+			return false
+		}
+		if chars1[i1] != chars2[i2] {
+			return false
+		}
+		index1 = i1 - 1
+		index2 = i2 - 1
+	}
+	return true
+}
+
+func findNextValidCharIndex(chars []string, index int) int {
+	backspaceCount := 0
+	for index >= 0 {
+		if chars[index] == "#" {
+			backspaceCount++
+		} else if backspaceCount > 0 {
+			backspaceCount--
+		} else {
+			break
+		}
+		index--
+	}
+	return index
+}
+
+func shortestWindowSort(arr []int) int {
+	low := 0
+	for low < len(arr) && arr[low] <= arr[low+1] {
+		low++
+	}
+	if low == len(arr)-1 {
+		//array is already sorted
+		return 0
+	}
+	high := len(arr) - 1
+	for high > 0 && arr[high] >= arr[high-1] {
+		high--
+	}
+
+	highestInSub := math.MinInt64
+	lowestInSub := math.MaxInt64
+	for i := low; i <= high; i++ {
+		if arr[i] > highestInSub {
+			highestInSub = arr[i]
+		}
+		if arr[i] < lowestInSub {
+			lowestInSub = arr[i]
+		}
+	}
+
+	for low > 0 && arr[low-1] > lowestInSub {
+		low--
+	}
+	for high < len(arr) && arr[high+1] < highestInSub {
+		high++
+	}
+
+	return high - low + 1
 }

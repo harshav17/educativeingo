@@ -196,7 +196,6 @@ func Test_dutchFlag(t *testing.T) {
 		args args
 		want []int
 	}{
-		// TODO: Add test cases.1, 0, 2, 1, 0
 		{
 			name: "sanity2",
 			args: args{[]int{1, 0, 2, 1, 0}},
@@ -207,6 +206,85 @@ func Test_dutchFlag(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := dutchFlag(tt.args.arr); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("dutchFlag() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_quadrupleSumToTarget(t *testing.T) {
+	type args struct {
+		arr    []int
+		target int
+	}
+	tests := []struct {
+		name string
+		args args
+		want [][]int
+	}{
+		{
+			name: "sanity2",
+			args: args{[]int{4, 1, 2, -1, 1, -3}, 1},
+			want: [][]int{{-3, -1, 1, 4}, {-3, 1, 1, 2}},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := quadrupleSumToTarget(tt.args.arr, tt.args.target); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("quadrupleSumToTarget() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_backspaceCompare(t *testing.T) {
+	type args struct {
+		str1 string
+		str2 string
+	}
+	tests := []struct {
+		name string
+		args args
+		want bool
+	}{
+		{
+			name: "sanity2",
+			args: args{"xy#z", "xzz#"},
+			want: true,
+		},
+		{
+			name: "sanity1",
+			args: args{"xy#z", "xyz#"},
+			want: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := backspaceCompare(tt.args.str1, tt.args.str2); got != tt.want {
+				t.Errorf("backspaceCompare() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_shortestWindowSort(t *testing.T) {
+	type args struct {
+		arr []int
+	}
+	tests := []struct {
+		name string
+		args args
+		want int
+	}{
+		{
+			name: "sanity2",
+			args: args{[]int{1, 2, 5, 3, 7, 10, 9, 12}},
+			want: 5,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := shortestWindowSort(tt.args.arr); got != tt.want {
+				t.Errorf("shortestWindowSort() = %v, want %v", got, tt.want)
 			}
 		})
 	}
