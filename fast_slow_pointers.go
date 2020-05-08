@@ -77,3 +77,42 @@ func findSquareSum(num int) int {
 	}
 	return sum
 }
+
+func findMiddle(head *node) *node {
+	slow := head
+	fast := head
+	for fast != nil && fast.next != nil {
+		slow = slow.next
+		fast = fast.next.next
+	}
+	return slow
+}
+
+func reverse(head *node) *node {
+	var prev *node
+	for head != nil {
+		next := head.next
+		head.next = prev
+		prev = head
+		head = next
+	}
+	return prev
+}
+
+func isPalindrome(head *node) bool {
+	middle := findMiddle(head)
+	headSecondHalf := reverse(middle)
+	copyHeadSecondHalf := headSecondHalf
+	for head != nil && headSecondHalf != nil {
+		if head.value != headSecondHalf.value {
+			break
+		}
+		head = head.next
+		headSecondHalf = headSecondHalf.next
+	}
+	reverse(copyHeadSecondHalf)
+	if head == nil || headSecondHalf == nil {
+		return true
+	}
+	return false
+}
