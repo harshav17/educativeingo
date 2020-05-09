@@ -102,7 +102,6 @@ func reverse(head *node) *node {
 func isPalindrome(head *node) bool {
 	middle := findMiddle(head)
 	headSecondHalf := reverse(middle)
-	copyHeadSecondHalf := headSecondHalf
 	for head != nil && headSecondHalf != nil {
 		if head.value != headSecondHalf.value {
 			break
@@ -110,9 +109,31 @@ func isPalindrome(head *node) bool {
 		head = head.next
 		headSecondHalf = headSecondHalf.next
 	}
-	reverse(copyHeadSecondHalf)
 	if head == nil || headSecondHalf == nil {
 		return true
 	}
 	return false
+}
+
+func rearrangeLinkedList(head *node) {
+	//find middle
+	middle := findMiddle(head)
+
+	//reverse second half
+	headSecondHalf := reverse(middle)
+	headFirstHalf := head
+
+	for headFirstHalf != nil && headSecondHalf != nil {
+		temp := headFirstHalf.next
+		headFirstHalf.next = headSecondHalf
+		headFirstHalf = temp
+
+		temp = headSecondHalf.next
+		headSecondHalf.next = headFirstHalf
+		headSecondHalf = temp
+	}
+
+	if headFirstHalf != nil {
+		headFirstHalf.next = nil
+	}
 }
