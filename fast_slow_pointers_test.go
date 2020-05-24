@@ -169,3 +169,37 @@ func Test_isPalindrome(t *testing.T) {
 		})
 	}
 }
+
+func Test_findCycleInCircularArray(t *testing.T) {
+	type args struct {
+		arr []int
+	}
+	tests := []struct {
+		name string
+		args args
+		want bool
+	}{
+		{
+			name: "sanity",
+			args: args{[]int{1, 2, -1, 2, 2}},
+			want: true,
+		},
+		{
+			name: "sanity",
+			args: args{[]int{2, 2, -1, 2}},
+			want: true,
+		},
+		{
+			name: "sanity",
+			args: args{[]int{2, 1, -1, -2}},
+			want: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := findCycleInCircularArray(tt.args.arr); got != tt.want {
+				t.Errorf("findCycleInCircularArray() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

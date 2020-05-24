@@ -137,3 +137,49 @@ func rearrangeLinkedList(head *node) {
 		headFirstHalf.next = nil
 	}
 }
+
+func findCycleInCircularArray(arr []int) bool {
+	for i := 0; i < len(arr); i++ {
+		isFwd := arr[i] > 0
+		slow := i
+		fast := i
+
+		for {
+			slow = findNextIndex(arr, isFwd, slow)
+			fast = findNextIndex(arr, isFwd, fast)
+			if fast != -1 {
+				fast = findNextIndex(arr, isFwd, fast)
+			}
+
+			if slow == -1 || fast == -1 || slow == fast {
+				break
+			}
+		}
+
+		if slow != -1 && slow == fast {
+			return true
+		}
+
+	}
+	return false
+}
+
+func findNextIndex(arr []int, isFwd bool, currIdx int) int {
+	//find direction and check if reversed
+	dir := arr[currIdx] >= 0
+	if isFwd != dir {
+		return -1
+	}
+
+	//move to next index, if negative rotate
+	nxtIdx := (currIdx + arr[currIdx]) % len(arr)
+	if nxtIdx < 0 {
+		nxtIdx += len(arr)
+	}
+
+	//single cycle
+	if nxtIdx == currIdx {
+		nxtIdx = -1
+	}
+	return nxtIdx
+}
