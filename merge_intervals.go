@@ -19,11 +19,19 @@ func (s customSort) Swap(i, j int) {
 func mergeIntervals(intervals [][2]int) [][2]int {
 	sort.Sort(customSort(intervals))
 	var result [][2]int
-	i := 1
-	for i < len(intervals) {
-		if intervals[i-1][1] > intervals[i][0] {
-			result = append(result, [2]int{intervals[i-1][0], intervals[i][1]})
+	start := intervals[0][0]
+	end := intervals[0][1]
+	for i := 1; i < len(intervals); i++ {
+		if end > intervals[i][0] {
+			if end < intervals[i][1] {
+				end = intervals[i][1]
+			}
+		} else {
+			result = append(result, [2]int{start, end})
+			start = intervals[i][0]
+			end = intervals[i][1]
 		}
 	}
+	result = append(result, [2]int{start, end})
 	return result
 }
