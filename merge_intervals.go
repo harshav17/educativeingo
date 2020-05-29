@@ -35,3 +35,29 @@ func mergeIntervals(intervals [][2]int) [][2]int {
 	result = append(result, [2]int{start, end})
 	return result
 }
+
+func insertIntervals(intervals [][2]int, newInterval [2]int) [][2]int {
+	var result [][2]int
+	i := 0
+	//adds everything before the new interval
+	for ; i < len(intervals) && newInterval[0] > intervals[i][1]; i++ {
+		result = append(result, intervals[i])
+	}
+
+	//merge all overlapping intervals
+	for ; i < len(intervals) && newInterval[1] > intervals[i][0]; i++ {
+		if intervals[i][0] < newInterval[0] {
+			newInterval[0] = intervals[i][0]
+		}
+		if intervals[i][1] > newInterval[1] {
+			newInterval[1] = intervals[i][1]
+		}
+	}
+	result = append(result, newInterval)
+
+	//add the remaining intervals
+	for ; i < len(intervals); i++ {
+		result = append(result, intervals[i])
+	}
+	return result
+}

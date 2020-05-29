@@ -33,3 +33,39 @@ func Test_mergeIntervals(t *testing.T) {
 		})
 	}
 }
+
+func Test_insertIntervals(t *testing.T) {
+	type args struct {
+		intervals   [][2]int
+		newInterval [2]int
+	}
+	tests := []struct {
+		name string
+		args args
+		want [][2]int
+	}{
+		{
+			name: "sanity",
+			args: args{
+				[][2]int{{1, 3}, {5, 7}, {8, 12}},
+				[2]int{4, 6},
+			},
+			want: [][2]int{{1, 3}, {4, 7}, {8, 12}},
+		},
+		{
+			name: "sanity",
+			args: args{
+				[][2]int{{1, 3}, {5, 7}, {8, 12}},
+				[2]int{4, 10},
+			},
+			want: [][2]int{{1, 3}, {4, 12}},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := insertIntervals(tt.args.intervals, tt.args.newInterval); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("insertIntervals() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
