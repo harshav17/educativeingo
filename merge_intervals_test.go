@@ -69,3 +69,39 @@ func Test_insertIntervals(t *testing.T) {
 		})
 	}
 }
+
+func Test_intervalIntersection(t *testing.T) {
+	type args struct {
+		interval1 [][2]int
+		interval2 [][2]int
+	}
+	tests := []struct {
+		name string
+		args args
+		want [][2]int
+	}{
+		{
+			name: "sanity",
+			args: args{
+				[][2]int{{1, 3}, {5, 6}, {7, 9}},
+				[][2]int{{2, 3}, {5, 7}},
+			},
+			want: [][2]int{{2, 3}, {5, 6}, {7, 7}},
+		},
+		{
+			name: "sanity",
+			args: args{
+				[][2]int{{1, 3}, {5, 7}, {9, 12}},
+				[][2]int{{5, 10}},
+			},
+			want: [][2]int{{5, 7}, {9, 10}},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := intervalIntersection(tt.args.interval1, tt.args.interval2); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("intervalIntersection() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

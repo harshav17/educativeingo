@@ -61,3 +61,32 @@ func insertIntervals(intervals [][2]int, newInterval [2]int) [][2]int {
 	}
 	return result
 }
+
+func intervalIntersection(interval1 [][2]int, interval2 [][2]int) [][2]int {
+	i := 0
+	j := 0
+	var result [][2]int
+	for i < len(interval1) && j < len(interval2) {
+		//if its overlapping
+		if interval1[i][0] >= interval2[j][0] && interval1[i][0] <= interval2[j][1] || interval2[j][0] >= interval1[i][0] && interval2[j][0] <= interval1[i][1] {
+			start := interval2[j][0]
+			if interval1[i][0] > interval2[j][0] {
+				start = interval1[i][0]
+			}
+
+			end := interval1[i][1]
+			if interval1[i][1] > interval2[j][1] {
+				end = interval2[j][1]
+			}
+
+			result = append(result, [2]int{start, end})
+		}
+
+		if interval1[i][1] < interval2[j][1] {
+			i++
+		} else {
+			j++
+		}
+	}
+	return result
+}
