@@ -7,7 +7,7 @@ import (
 
 func Test_mergeIntervals(t *testing.T) {
 	type args struct {
-		intervals [][2]int
+		intervals [][]int
 	}
 	tests := []struct {
 		name string
@@ -16,12 +16,12 @@ func Test_mergeIntervals(t *testing.T) {
 	}{
 		{
 			name: "sanity",
-			args: args{[][2]int{{1, 4}, {2, 6}, {3, 5}}},
+			args: args{[][]int{{1, 4}, {2, 6}, {3, 5}}},
 			want: [][2]int{{1, 6}},
 		},
 		{
 			name: "sanity2",
-			args: args{[][2]int{{6, 7}, {2, 4}, {5, 9}}},
+			args: args{[][]int{{6, 7}, {2, 4}, {5, 9}}},
 			want: [][2]int{{2, 4}, {5, 9}},
 		},
 	}
@@ -108,7 +108,7 @@ func Test_intervalIntersection(t *testing.T) {
 
 func Test_conflictingAppointments(t *testing.T) {
 	type args struct {
-		intervals [][2]int
+		intervals [][]int
 	}
 	tests := []struct {
 		name string
@@ -117,12 +117,12 @@ func Test_conflictingAppointments(t *testing.T) {
 	}{
 		{
 			name: "sanity",
-			args: args{[][2]int{{1, 4}, {2, 6}, {3, 5}}},
+			args: args{[][]int{{1, 4}, {2, 6}, {3, 5}}},
 			want: false,
 		},
 		{
 			name: "sanity",
-			args: args{[][2]int{{3, 4}, {1, 2}, {5, 6}}},
+			args: args{[][]int{{3, 4}, {1, 2}, {5, 6}}},
 			want: true,
 		},
 	}
@@ -137,7 +137,7 @@ func Test_conflictingAppointments(t *testing.T) {
 
 func Test_minimumMeetingRooms(t *testing.T) {
 	type args struct {
-		intervals [][2]int
+		intervals [][]int
 	}
 	tests := []struct {
 		name string
@@ -146,12 +146,12 @@ func Test_minimumMeetingRooms(t *testing.T) {
 	}{
 		{
 			name: "sanity",
-			args: args{[][2]int{{1, 4}, {2, 6}, {3, 5}}},
+			args: args{[][]int{{1, 4}, {2, 6}, {3, 5}}},
 			want: 3,
 		},
 		{
 			name: "sanity",
-			args: args{[][2]int{{1, 4}, {2, 5}, {7, 9}}},
+			args: args{[][]int{{1, 4}, {2, 5}, {7, 9}}},
 			want: 2,
 		},
 	}
@@ -159,6 +159,40 @@ func Test_minimumMeetingRooms(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := minimumMeetingRooms(tt.args.intervals); got != tt.want {
 				t.Errorf("minimumMeetingRooms() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_findMaxCPULoad(t *testing.T) {
+	type args struct {
+		jobs [][]int
+	}
+	tests := []struct {
+		name string
+		args args
+		want int
+	}{
+		{
+			name: "sanity",
+			args: args{[][]int{{1, 4, 3}, {2, 5, 4}, {7, 9, 6}}},
+			want: 7,
+		},
+		{
+			name: "sanity",
+			args: args{[][]int{{6, 7, 10}, {2, 4, 11}, {8, 12, 15}}},
+			want: 15,
+		},
+		{
+			name: "sanity",
+			args: args{[][]int{{1, 4, 2}, {2, 4, 1}, {3, 6, 5}}},
+			want: 8,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := findMaxCPULoad(tt.args.jobs); got != tt.want {
+				t.Errorf("findMaxCPULoad() = %v, want %v", got, tt.want)
 			}
 		})
 	}

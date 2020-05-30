@@ -2,7 +2,7 @@ package educativeingo
 
 import "sort"
 
-type heapySort [][2]int
+type heapySort [][]int
 
 func (s heapySort) Len() int {
 	return len(s)
@@ -17,7 +17,7 @@ func (s heapySort) Swap(i, j int) {
 }
 
 func (s *heapySort) push(x interface{}) {
-	*s = append(*s, x.([2]int))
+	*s = append(*s, x.([]int))
 }
 
 func (s *heapySort) pop() interface{} {
@@ -27,7 +27,7 @@ func (s *heapySort) pop() interface{} {
 	return old[n-1]
 }
 
-func mergeIntervals(intervals [][2]int) [][2]int {
+func mergeIntervals(intervals [][]int) [][2]int {
 	sort.Sort(heapySort(intervals))
 	var result [][2]int
 	start := intervals[0][0]
@@ -102,7 +102,7 @@ func intervalIntersection(interval1 [][2]int, interval2 [][2]int) [][2]int {
 	return result
 }
 
-func conflictingAppointments(intervals [][2]int) bool {
+func conflictingAppointments(intervals [][]int) bool {
 	sort.Sort(heapySort(intervals))
 	end := intervals[0][1]
 	for i := 1; i < len(intervals); i++ {
@@ -113,7 +113,7 @@ func conflictingAppointments(intervals [][2]int) bool {
 	return true
 }
 
-func minimumMeetingRooms(intervals [][2]int) int {
+func minimumMeetingRooms(intervals [][]int) int {
 	sort.Sort(heapySort(intervals))
 	minRooms := 0
 	heap := heapySort{}
@@ -128,4 +128,24 @@ func minimumMeetingRooms(intervals [][2]int) int {
 		}
 	}
 	return minRooms
+}
+
+func findMaxCPULoad(jobs [][]int) int {
+	sort.Sort(heapySort(jobs))
+	maxCPULoad := 0
+	currentCPULoad := 0
+	heap := heapySort{}
+	for i := 0; i < len(jobs); i++ {
+		for len(heap) > 0 && jobs[i][0] > heap[len(heap)-1][1] {
+			j := heap.pop().([]int)
+			currentCPULoad -= j[2]
+		}
+		heap.push(jobs[i])
+		currentCPULoad += jobs[i][2]
+
+		if maxCPULoad < currentCPULoad {
+			maxCPULoad = currentCPULoad
+		}
+	}
+	return maxCPULoad
 }
