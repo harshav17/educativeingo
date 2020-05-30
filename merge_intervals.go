@@ -1,6 +1,9 @@
 package educativeingo
 
-import "sort"
+import (
+	"container/heap"
+	"sort"
+)
 
 type heapySort [][]int
 
@@ -16,14 +19,14 @@ func (s heapySort) Swap(i, j int) {
 	s[i], s[j] = s[j], s[i]
 }
 
-func (s *heapySort) push(x interface{}) {
+func (s *heapySort) Push(x interface{}) {
 	*s = append(*s, x.([]int))
 }
 
-func (s *heapySort) pop() interface{} {
+func (s *heapySort) Pop() interface{} {
 	old := *s
 	n := len(*s)
-	*s = old[:n-1]
+	*s = old[0 : n-1]
 	return old[n-1]
 }
 
@@ -116,15 +119,15 @@ func conflictingAppointments(intervals [][]int) bool {
 func minimumMeetingRooms(intervals [][]int) int {
 	sort.Sort(heapySort(intervals))
 	minRooms := 0
-	heap := heapySort{}
-	for i := 0; i < len(intervals); i++ {
-		for len(heap) > 0 && intervals[i][0] > heap[len(heap)-1][1] {
-			heap.pop()
+	heapS := &heapySort{}
+	for i := range intervals {
+		for len(*heapS) > 0 && intervals[i][0] > (*heapS)[len(*heapS)-1][1] {
+			heap.Pop(heapS)
 		}
-		heap.push(intervals[i])
+		heap.Push(heapS, intervals[i])
 
-		if minRooms < len(heap) {
-			minRooms = len(heap)
+		if minRooms < len(*heapS) {
+			minRooms = len(*heapS)
 		}
 	}
 	return minRooms
@@ -134,13 +137,13 @@ func findMaxCPULoad(jobs [][]int) int {
 	sort.Sort(heapySort(jobs))
 	maxCPULoad := 0
 	currentCPULoad := 0
-	heap := heapySort{}
-	for i := 0; i < len(jobs); i++ {
-		for len(heap) > 0 && jobs[i][0] > heap[len(heap)-1][1] {
-			j := heap.pop().([]int)
+	heapS := &heapySort{}
+	for i := range jobs {
+		for len(*heapS) > 0 && jobs[i][0] > (*heapS)[len(*heapS)-1][1] {
+			j := heap.Pop(heapS).([]int)
 			currentCPULoad -= j[2]
 		}
-		heap.push(jobs[i])
+		heap.Push(heapS, jobs[i])
 		currentCPULoad += jobs[i][2]
 
 		if maxCPULoad < currentCPULoad {
@@ -148,4 +151,69 @@ func findMaxCPULoad(jobs [][]int) int {
 		}
 	}
 	return maxCPULoad
+}
+
+type employeeInt struct {
+	employeeNum int
+	intIndex    int
+	employeeHrs []int
+}
+
+type empInts []employeeInt
+
+func (e empInts) Len() int {
+	return len(e)
+}
+
+func (e empInts) Less(i, j int) bool {
+	return e[i].employeeHrs[0] < e[j].employeeHrs[0]
+}
+
+func (e empInts) Swap(i, j int) {
+	e[i], e[j] = e[j], e[i]
+}
+
+func (e *empInts) Push(x interface{}) {
+	*e = append(*e, x.(employeeInt))
+}
+
+func (e *empInts) Pop() interface{} {
+	n := len(*e)
+	old := *e
+	x := old[n-1]
+	*e = old[0 : n-1]
+	return x
+}
+
+func findEmployeeFreeTime(hours [][][]int) [][]int {
+	empsHeap := &empInts{}
+	heap.Init(empsHeap)
+	var result [][]int
+	//push first intervals of all employees
+	for i, v := range hours {
+		//no compilation warnings here because of empty interface
+		heap.Push(empsHeap, employeeInt{employeeNum: i, intIndex: 0, employeeHrs: v[0]})
+	}
+
+	prevInt := (*empsHeap)[len(*empsHeap)-1].employeeHrs
+	for len(*empsHeap) > 0 {
+		emp := heap.Pop(empsHeap).(employeeInt)
+
+		if prevInt[1] < emp.employeeHrs[0] {
+			//not overlapping
+			result = append(result, []int{prevInt[1], emp.employeeHrs[0]})
+			prevInt = emp.employeeHrs
+		} else {
+			//overlapping
+			if prevInt[1] < emp.employeeHrs[1] {
+				prevInt = emp.employeeHrs
+			}
+		}
+
+		//add the popped employee's next interval
+		if len(hours[emp.employeeNum]) > emp.intIndex+1 {
+			heap.Push(empsHeap, employeeInt{employeeNum: emp.employeeNum, intIndex: emp.intIndex + 1, employeeHrs: hours[emp.employeeNum][emp.intIndex+1]})
+		}
+	}
+	return result
 }

@@ -197,3 +197,37 @@ func Test_findMaxCPULoad(t *testing.T) {
 		})
 	}
 }
+
+func Test_findEmployeeFreeTime(t *testing.T) {
+	type args struct {
+		hours [][][]int
+	}
+	tests := []struct {
+		name string
+		args args
+		want [][]int
+	}{
+		{
+			name: "sanity",
+			args: args{[][][]int{{{1, 3}, {5, 6}}, {{2, 3}, {6, 8}}}},
+			want: [][]int{{3, 5}},
+		},
+		{
+			name: "sanity",
+			args: args{[][][]int{{{2, 4}, {6, 8}}, {{1, 3}, {9, 12}}}},
+			want: [][]int{{4, 6}, {8, 9}},
+		},
+		{
+			name: "sanity",
+			args: args{[][][]int{{{1, 3}, {2, 4}}, {{3, 5}, {7, 9}}}},
+			want: [][]int{{5, 7}},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := findEmployeeFreeTime(tt.args.hours); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("findEmployeeFreeTime() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
