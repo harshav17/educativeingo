@@ -90,3 +90,14 @@ func intervalIntersection(interval1 [][2]int, interval2 [][2]int) [][2]int {
 	}
 	return result
 }
+
+func conflictingAppointments(intervals [][2]int) bool {
+	sort.Sort(customSort(intervals))
+	end := intervals[0][1]
+	for i := 1; i < len(intervals); i++ {
+		if end > intervals[i][0] {
+			return false
+		}
+	}
+	return true
+}
