@@ -134,3 +134,32 @@ func Test_conflictingAppointments(t *testing.T) {
 		})
 	}
 }
+
+func Test_minimumMeetingRooms(t *testing.T) {
+	type args struct {
+		intervals [][2]int
+	}
+	tests := []struct {
+		name string
+		args args
+		want int
+	}{
+		{
+			name: "sanity",
+			args: args{[][2]int{{1, 4}, {2, 6}, {3, 5}}},
+			want: 3,
+		},
+		{
+			name: "sanity",
+			args: args{[][2]int{{1, 4}, {2, 5}, {7, 9}}},
+			want: 2,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := minimumMeetingRooms(tt.args.intervals); got != tt.want {
+				t.Errorf("minimumMeetingRooms() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

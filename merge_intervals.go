@@ -2,22 +2,33 @@ package educativeingo
 
 import "sort"
 
-type customSort [][2]int
+type heapySort [][2]int
 
-func (s customSort) Len() int {
+func (s heapySort) Len() int {
 	return len(s)
 }
 
-func (s customSort) Less(i, j int) bool {
+func (s heapySort) Less(i, j int) bool {
 	return s[i][0] < s[j][0]
 }
 
-func (s customSort) Swap(i, j int) {
+func (s heapySort) Swap(i, j int) {
 	s[i], s[j] = s[j], s[i]
 }
 
+func (s *heapySort) push(x interface{}) {
+	*s = append(*s, x.([2]int))
+}
+
+func (s *heapySort) pop() interface{} {
+	old := *s
+	n := len(*s)
+	*s = old[:n-1]
+	return old[n-1]
+}
+
 func mergeIntervals(intervals [][2]int) [][2]int {
-	sort.Sort(customSort(intervals))
+	sort.Sort(heapySort(intervals))
 	var result [][2]int
 	start := intervals[0][0]
 	end := intervals[0][1]
@@ -92,7 +103,7 @@ func intervalIntersection(interval1 [][2]int, interval2 [][2]int) [][2]int {
 }
 
 func conflictingAppointments(intervals [][2]int) bool {
-	sort.Sort(customSort(intervals))
+	sort.Sort(heapySort(intervals))
 	end := intervals[0][1]
 	for i := 1; i < len(intervals); i++ {
 		if end > intervals[i][0] {
@@ -100,4 +111,21 @@ func conflictingAppointments(intervals [][2]int) bool {
 		}
 	}
 	return true
+}
+
+func minimumMeetingRooms(intervals [][2]int) int {
+	sort.Sort(heapySort(intervals))
+	minRooms := 0
+	heap := heapySort{}
+	for i := 0; i < len(intervals); i++ {
+		for len(heap) > 0 && intervals[i][0] > heap[len(heap)-1][1] {
+			heap.pop()
+		}
+		heap.push(intervals[i])
+
+		if minRooms < len(heap) {
+			minRooms = len(heap)
+		}
+	}
+	return minRooms
 }
