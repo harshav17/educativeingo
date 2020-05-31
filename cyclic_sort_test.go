@@ -164,3 +164,32 @@ func Test_findAllDuplicates(t *testing.T) {
 		})
 	}
 }
+
+func Test_findDuplicateAndMissing(t *testing.T) {
+	type args struct {
+		nums []int
+	}
+	tests := []struct {
+		name string
+		args args
+		want []int
+	}{
+		{
+			name: "sanity",
+			args: args{[]int{3, 1, 2, 5, 2}},
+			want: []int{2, 4},
+		},
+		{
+			name: "sanity",
+			args: args{[]int{3, 1, 2, 3, 6, 4}},
+			want: []int{3, 5},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := findDuplicateAndMissing(tt.args.nums); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("findDuplicateAndMissing() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

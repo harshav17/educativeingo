@@ -79,3 +79,22 @@ func findAllDuplicates(nums []int) []int {
 	}
 	return result
 }
+
+func findDuplicateAndMissing(nums []int) []int {
+	var result []int
+	for i := 0; i < len(nums); {
+		v := nums[i] - 1
+		if nums[v] != nums[i] {
+			nums[v], nums[i] = nums[i], nums[v]
+		} else {
+			i++
+		}
+	}
+
+	for i, v := range nums {
+		if v != i+1 {
+			result = append(result, v, i+1)
+		}
+	}
+	return result
+}
