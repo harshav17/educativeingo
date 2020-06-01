@@ -98,3 +98,49 @@ func findDuplicateAndMissing(nums []int) []int {
 	}
 	return result
 }
+
+func findSmallestMissingPositiveNumber(nums []int) int {
+	for i := 0; i < len(nums); {
+		if nums[i] > 0 && nums[i] < len(nums) && nums[i] != nums[nums[i]-1] {
+			nums[nums[i]-1], nums[i] = nums[i], nums[nums[i]-1]
+		} else {
+			i++
+		}
+	}
+
+	for i, v := range nums {
+		if v != i+1 {
+			return i + 1
+		}
+	}
+
+	return -1
+}
+
+func findKMissingPositiveNums(nums []int, k int) []int {
+	var results []int
+	xtraNos := make(map[int]bool)
+	for i := 0; i < len(nums); {
+		if nums[i] > 0 && nums[i] <= len(nums) && nums[i] != nums[nums[i]-1] {
+			nums[nums[i]-1], nums[i] = nums[i], nums[nums[i]-1]
+		} else {
+			i++
+		}
+	}
+
+	for i := 0; i < len(nums) && len(results) < k; i++ {
+		if nums[i] != i+1 {
+			results = append(results, i+1)
+			xtraNos[nums[i]] = true
+		}
+	}
+
+	for i := 1; len(results) < k; i++ {
+		candNo := i + len(nums)
+
+		if !xtraNos[candNo] {
+			results = append(results, candNo)
+		}
+	}
+	return results
+}

@@ -193,3 +193,72 @@ func Test_findDuplicateAndMissing(t *testing.T) {
 		})
 	}
 }
+
+func Test_findSmallestMissingPositiveNumber(t *testing.T) {
+	type args struct {
+		nums []int
+	}
+	tests := []struct {
+		name string
+		args args
+		want int
+	}{
+		{
+			name: "sanity",
+			args: args{[]int{-3, 1, 5, 4, 2}},
+			want: 3,
+		},
+		{
+			name: "sanity",
+			args: args{[]int{3, -2, 0, 1, 2}},
+			want: 4,
+		},
+		{
+			name: "sanity",
+			args: args{[]int{3, 2, 5, 1}},
+			want: 4,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := findSmallestMissingPositiveNumber(tt.args.nums); got != tt.want {
+				t.Errorf("findSmallestMissingPositiveNumber() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_findKMissingPositiveNums(t *testing.T) {
+	type args struct {
+		nums []int
+		k    int
+	}
+	tests := []struct {
+		name string
+		args args
+		want []int
+	}{
+		{
+			name: "sanity",
+			args: args{[]int{3, -1, 4, 5, 5}, 3},
+			want: []int{1, 2, 6},
+		},
+		{
+			name: "sanity",
+			args: args{[]int{2, 3, 4}, 3},
+			want: []int{1, 5, 6},
+		},
+		{
+			name: "sanity",
+			args: args{[]int{-2, -3, 4}, 2},
+			want: []int{1, 2},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := findKMissingPositiveNums(tt.args.nums, tt.args.k); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("findKMissingPositiveNums() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
