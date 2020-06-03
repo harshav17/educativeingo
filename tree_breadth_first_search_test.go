@@ -139,3 +139,31 @@ func Test_findMinimumDepth(t *testing.T) {
 		})
 	}
 }
+
+func Test_findSuccessor(t *testing.T) {
+	type args struct {
+		root *treeNode
+		key  int
+	}
+
+	input := treeNode{1, &treeNode{2, &treeNode{4, nil, nil}, &treeNode{5, nil, nil}}, &treeNode{3, nil, nil}}
+
+	tests := []struct {
+		name string
+		args args
+		want *treeNode
+	}{
+		{
+			name: "sanity",
+			args: args{root: &input, key: 3},
+			want: &treeNode{4, nil, nil},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := findSuccessor(tt.args.root, tt.args.key); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("findSuccessor() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

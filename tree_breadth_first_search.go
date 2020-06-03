@@ -143,3 +143,24 @@ func findMinimumDepth(root *treeNode) int {
 	}
 	return -1
 }
+
+func findSuccessor(root *treeNode, key int) *treeNode {
+	queue := []*treeNode{root}
+	for len(queue) > 0 {
+		top := queue[0]
+
+		if top.left != nil {
+			queue = append(queue, top.left)
+		}
+		if top.right != nil {
+			queue = append(queue, top.right)
+		}
+
+		queue = queue[1:]
+
+		if key == top.val {
+			break
+		}
+	}
+	return queue[0]
+}
