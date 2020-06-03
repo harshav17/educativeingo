@@ -60,3 +60,31 @@ func Test_reverseLevelOrderTrav(t *testing.T) {
 		})
 	}
 }
+
+func Test_zigzagLevelOrderTrav(t *testing.T) {
+	type args struct {
+		root *treeNode
+	}
+
+	input := treeNode{1, &treeNode{2, &treeNode{4, nil, nil}, &treeNode{5, nil, nil}}, &treeNode{3, &treeNode{6, nil, nil}, &treeNode{7, nil, nil}}}
+	output := [][]int{{1}, {3, 2}, {4, 5, 6, 7}}
+
+	tests := []struct {
+		name string
+		args args
+		want [][]int
+	}{
+		{
+			name: "sanity",
+			args: args{&input},
+			want: output,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := zigzagLevelOrderTrav(tt.args.root); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("zigzagLevelOrderTrav() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

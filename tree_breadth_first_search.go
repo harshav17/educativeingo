@@ -8,20 +8,19 @@ type treeNode struct {
 
 func levelOrderTraversal(root *treeNode) [][]int {
 	queue := []*treeNode{root}
-	results := [][]int{{root.val}}
+	var results [][]int
 
 	for len(queue) > 0 {
 		var level []int
 		levLen := len(queue)
 		for i := 0; i < levLen; i++ {
 			top := queue[0]
+			level = append(level, top.val)
 			if top.left != nil {
 				queue = append(queue, top.left)
-				level = append(level, top.left.val)
 			}
 			if top.right != nil {
 				queue = append(queue, top.right)
-				level = append(level, top.right.val)
 			}
 			queue = queue[1:]
 		}
@@ -35,20 +34,19 @@ func levelOrderTraversal(root *treeNode) [][]int {
 
 func reverseLevelOrderTrav(root *treeNode) [][]int {
 	queue := []*treeNode{root}
-	results := [][]int{{root.val}}
+	var results [][]int
 
 	for len(queue) > 0 {
 		var level []int
 		levLen := len(queue)
 		for i := 0; i < levLen; i++ {
 			top := queue[0]
+			level = append(level, top.val)
 			if top.left != nil {
 				queue = append(queue, top.left)
-				level = append(level, top.left.val)
 			}
 			if top.right != nil {
 				queue = append(queue, top.right)
-				level = append(level, top.right.val)
 			}
 			queue = queue[1:]
 		}
@@ -57,5 +55,38 @@ func reverseLevelOrderTrav(root *treeNode) [][]int {
 		}
 	}
 
+	return results
+}
+
+func zigzagLevelOrderTrav(root *treeNode) [][]int {
+	queue := []*treeNode{root}
+	var results [][]int
+	flip := true
+
+	for len(queue) > 0 {
+		var level []int
+		levLen := len(queue)
+		for i := 0; i < levLen; i++ {
+			top := queue[0]
+
+			if flip {
+				level = append(level, top.val)
+			} else {
+				level = append([]int{top.val}, level...)
+			}
+
+			if top.left != nil {
+				queue = append(queue, top.left)
+			}
+			if top.right != nil {
+				queue = append(queue, top.right)
+			}
+			queue = queue[1:]
+		}
+		if level != nil {
+			results = append(results, level)
+		}
+		flip = !flip
+	}
 	return results
 }
