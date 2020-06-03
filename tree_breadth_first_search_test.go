@@ -88,3 +88,54 @@ func Test_zigzagLevelOrderTrav(t *testing.T) {
 		})
 	}
 }
+
+func Test_findLevelAverages(t *testing.T) {
+	type args struct {
+		root *treeNode
+	}
+	input := treeNode{1, &treeNode{2, &treeNode{4, nil, nil}, &treeNode{5, nil, nil}}, &treeNode{3, &treeNode{6, nil, nil}, &treeNode{7, nil, nil}}}
+	output := []float32{1, 2.5, 5.5}
+	tests := []struct {
+		name string
+		args args
+		want []float32
+	}{
+		{
+			name: "sanity",
+			args: args{&input},
+			want: output,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := findLevelAverages(tt.args.root); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("findLevelAverages() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_findMinimumDepth(t *testing.T) {
+	type args struct {
+		root *treeNode
+	}
+	input := treeNode{1, &treeNode{2, &treeNode{4, nil, nil}, &treeNode{5, nil, nil}}, &treeNode{3, nil, nil}}
+	tests := []struct {
+		name string
+		args args
+		want int
+	}{
+		{
+			name: "sanity",
+			args: args{&input},
+			want: 2,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := findMinimumDepth(tt.args.root); got != tt.want {
+				t.Errorf("findMinimumDepth() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
