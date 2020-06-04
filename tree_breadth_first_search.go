@@ -164,3 +164,83 @@ func findSuccessor(root *treeNode, key int) *treeNode {
 	}
 	return queue[0]
 }
+
+type treeNodeWNext struct {
+	val   int
+	left  *treeNodeWNext
+	right *treeNodeWNext
+	next  *treeNodeWNext
+}
+
+func connectLevelOrderSiblings(root *treeNodeWNext) *treeNodeWNext {
+	queue := []*treeNodeWNext{root}
+	for len(queue) > 0 {
+		lvlLen := len(queue)
+		var prevNode *treeNodeWNext
+		for i := 0; i < lvlLen; i++ {
+			top := queue[0]
+
+			if prevNode != nil {
+				prevNode.next = top
+			}
+			prevNode = top
+
+			if top.left != nil {
+				queue = append(queue, top.left)
+			}
+			if top.right != nil {
+				queue = append(queue, top.right)
+			}
+
+			queue = queue[1:]
+		}
+	}
+	return root
+}
+
+func connectAllSiblings(root *treeNodeWNext) *treeNodeWNext {
+	queue := []*treeNodeWNext{root}
+	var prevNode *treeNodeWNext
+	for len(queue) > 0 {
+		top := queue[0]
+
+		if prevNode != nil {
+			prevNode.next = top
+		}
+		prevNode = top
+
+		if top.left != nil {
+			queue = append(queue, top.left)
+		}
+		if top.right != nil {
+			queue = append(queue, top.right)
+		}
+
+		queue = queue[1:]
+	}
+	return root
+}
+
+func treeRightView(root *treeNode) []int {
+	queue := []*treeNode{root}
+	var results []int
+	for len(queue) > 0 {
+		lvlLen := len(queue)
+		for i := 0; i < lvlLen; i++ {
+			top := queue[0]
+
+			if top.left != nil {
+				queue = append(queue, top.left)
+			}
+			if top.right != nil {
+				queue = append(queue, top.right)
+			}
+
+			queue = queue[1:]
+			if i+1 == lvlLen {
+				results = append(results, top.val)
+			}
+		}
+	}
+	return results
+}

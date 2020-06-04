@@ -167,3 +167,90 @@ func Test_findSuccessor(t *testing.T) {
 		})
 	}
 }
+
+func Test_connectLevelOrderSiblings(t *testing.T) {
+	type args struct {
+		root *treeNodeWNext
+	}
+
+	input := treeNodeWNext{1, &treeNodeWNext{2, &treeNodeWNext{4, nil, nil, nil}, &treeNodeWNext{5, nil, nil, nil}, nil}, &treeNodeWNext{3, &treeNodeWNext{6, nil, nil, nil}, &treeNodeWNext{7, nil, nil, nil}, nil}, nil}
+
+	tests := []struct {
+		name string
+		args args
+		want *treeNodeWNext
+	}{
+		{
+			name: "sanity",
+			args: args{root: &input},
+			want: &input,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := connectLevelOrderSiblings(tt.args.root); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("connectLevelOrderSiblings() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_connectAllSiblings(t *testing.T) {
+	type args struct {
+		root *treeNodeWNext
+	}
+
+	input := treeNodeWNext{1, &treeNodeWNext{2, &treeNodeWNext{4, nil, nil, nil}, &treeNodeWNext{5, nil, nil, nil}, nil}, &treeNodeWNext{3, &treeNodeWNext{6, nil, nil, nil}, &treeNodeWNext{7, nil, nil, nil}, nil}, nil}
+
+	tests := []struct {
+		name string
+		args args
+		want *treeNodeWNext
+	}{
+		{
+			name: "sanity",
+			args: args{root: &input},
+			want: &input,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := connectAllSiblings(tt.args.root); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("connectAllSiblings() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_treeRightView(t *testing.T) {
+	type args struct {
+		root *treeNode
+	}
+
+	input1 := treeNode{1, &treeNode{2, &treeNode{4, nil, nil}, &treeNode{5, nil, nil}}, &treeNode{3, nil, nil}}
+	input2 := treeNode{1, &treeNode{2, &treeNode{4, nil, nil}, &treeNode{5, nil, nil}}, &treeNode{3, &treeNode{6, nil, nil}, &treeNode{7, nil, nil}}}
+
+	tests := []struct {
+		name string
+		args args
+		want []int
+	}{
+		{
+			name: "sanity",
+			args: args{root: &input1},
+			want: []int{1, 3, 5},
+		},
+		{
+			name: "sanity",
+			args: args{root: &input2},
+			want: []int{1, 3, 7},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := treeRightView(tt.args.root); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("treeRightView() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
