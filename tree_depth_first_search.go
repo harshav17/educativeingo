@@ -15,13 +15,13 @@ func HasPath(root *treeNode, sum int) bool {
 
 //FindAllPaths that add up to the given sum
 func FindAllPaths(root *treeNode, sum int) [][]int {
-	currPath := make([]int, 10)
-	allPaths := make([][]int, 10)
-	findPath(root, sum, currPath, allPaths)
-	return [][]int{}
+	var currPath []int
+	var allPaths [][]int
+	findPath(root, sum, currPath, &allPaths)
+	return allPaths
 }
 
-func findPath(root *treeNode, sum int, currPath []int, allPaths [][]int) {
+func findPath(root *treeNode, sum int, currPath []int, allPaths *[][]int) {
 	if root == nil {
 		return
 	}
@@ -29,8 +29,11 @@ func findPath(root *treeNode, sum int, currPath []int, allPaths [][]int) {
 	currPath = append(currPath, root.val)
 
 	if root.val == sum && root.left == nil && root.right == nil {
-		allPaths = append(allPaths, currPath)
+		*allPaths = append(*allPaths, currPath)
 	} else {
-
+		findPath(root.left, sum-root.val, currPath, allPaths)
+		findPath(root.right, sum-root.val, currPath, allPaths)
 	}
+
+	currPath = currPath[:len(currPath)-1]
 }
