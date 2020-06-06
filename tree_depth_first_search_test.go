@@ -60,3 +60,103 @@ func TestFindAllPaths(t *testing.T) {
 		})
 	}
 }
+
+func TestFindSumOfPathNumbers(t *testing.T) {
+	type args struct {
+		root *treeNode
+	}
+
+	input1 := treeNode{1, &treeNode{7, nil, nil}, &treeNode{9, &treeNode{2, nil, nil}, &treeNode{9, nil, nil}}}
+	input2 := treeNode{1, &treeNode{0, nil, &treeNode{1, nil, nil}}, &treeNode{1, &treeNode{6, nil, nil}, &treeNode{5, nil, nil}}}
+
+	tests := []struct {
+		name string
+		args args
+		want int
+	}{
+		{
+			name: "sanity",
+			args: args{root: &input1},
+			want: 408,
+		},
+		{
+			name: "sanity",
+			args: args{root: &input2},
+			want: 332,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := FindSumOfPathNumbers(tt.args.root); got != tt.want {
+				t.Errorf("FindSumOfPathNumbers() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestFindPathWGivenSequence(t *testing.T) {
+	type args struct {
+		root *treeNode
+		seq  []int
+	}
+
+	input1 := treeNode{1, &treeNode{7, nil, nil}, &treeNode{9, &treeNode{2, nil, nil}, &treeNode{9, nil, nil}}}
+	input2 := treeNode{1, &treeNode{0, nil, &treeNode{1, nil, nil}}, &treeNode{1, &treeNode{6, nil, nil}, &treeNode{5, nil, nil}}}
+
+	tests := []struct {
+		name string
+		args args
+		want bool
+	}{
+		{
+			name: "sanity",
+			args: args{root: &input1, seq: []int{1, 9, 9}},
+			want: true,
+		},
+		{
+			name: "sanity",
+			args: args{root: &input2, seq: []int{1, 0, 7}},
+			want: false,
+		},
+		{
+			name: "sanity",
+			args: args{root: &input2, seq: []int{1, 1, 6}},
+			want: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := FindPathWGivenSequence(tt.args.root, tt.args.seq); got != tt.want {
+				t.Errorf("FindPathWGivenSequence() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestCountPathsOfSum(t *testing.T) {
+	type args struct {
+		root *treeNode
+		sum  int
+	}
+
+	input1 := treeNode{1, &treeNode{7, &treeNode{6, nil, nil}, &treeNode{5, nil, nil}}, &treeNode{9, &treeNode{2, nil, nil}, &treeNode{3, nil, nil}}}
+
+	tests := []struct {
+		name string
+		args args
+		want int
+	}{
+		{
+			name: "sanity",
+			args: args{root: &input1, sum: 12},
+			want: 3,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := CountPathsOfSum(tt.args.root, tt.args.sum); got != tt.want {
+				t.Errorf("CountPathsOfSum() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
