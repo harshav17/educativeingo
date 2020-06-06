@@ -1,5 +1,7 @@
 package educativeingo
 
+import "math"
+
 //HasPath that add up to a given sum
 func HasPath(root *treeNode, sum int) bool {
 	if root == nil {
@@ -108,6 +110,63 @@ func findPathsOfSum(root *treeNode, sum int, currPath []int) int {
 	return pathCount
 }
 
-func findDiameter(root *treeNode) int {
-	return 0
+//FindDiameter of a tree
+func FindDiameter(root *treeNode) int {
+	maxDia := 0
+	findDia(root, &maxDia)
+	return maxDia
+}
+
+func findDia(root *treeNode, maxDia *int) int {
+	if root == nil {
+		return 0
+	}
+
+	leftHgt := findDia(root.left, maxDia)
+	rightHgt := findDia(root.right, maxDia)
+
+	currDia := leftHgt + rightHgt + 1
+	if currDia > *maxDia {
+		*maxDia = currDia
+	}
+
+	maxHgt := rightHgt + 1
+	if leftHgt > rightHgt {
+		maxHgt = leftHgt + 1
+	}
+	return maxHgt
+}
+
+//SumOfPathWMaxSum of a tree
+func SumOfPathWMaxSum(root *treeNode) int {
+	maxSum := -math.MaxInt32
+	findPathWMaxSum(root, &maxSum)
+	return maxSum
+}
+
+func findPathWMaxSum(root *treeNode, maxSum *int) int {
+	if root == nil {
+		return 0
+	}
+
+	leftHgt := findPathWMaxSum(root.left, maxSum)
+	if leftHgt < 0 {
+		leftHgt = 0
+	}
+
+	rightHgt := findPathWMaxSum(root.right, maxSum)
+	if rightHgt < 0 {
+		rightHgt = 0
+	}
+
+	currSum := leftHgt + rightHgt + root.val
+	if currSum > *maxSum {
+		*maxSum = currSum
+	}
+
+	maxhgt := rightHgt + root.val
+	if leftHgt > rightHgt {
+		maxhgt = leftHgt + root.val
+	}
+	return maxhgt
 }

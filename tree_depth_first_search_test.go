@@ -160,3 +160,69 @@ func TestCountPathsOfSum(t *testing.T) {
 		})
 	}
 }
+
+func TestFindDiameter(t *testing.T) {
+	type args struct {
+		root *treeNode
+	}
+
+	input1 := treeNode{1, &treeNode{2, &treeNode{4, nil, nil}, nil}, &treeNode{3, &treeNode{5, nil, nil}, &treeNode{6, nil, nil}}}
+
+	tests := []struct {
+		name string
+		args args
+		want int
+	}{
+		{
+			name: "sanity",
+			args: args{root: &input1},
+			want: 5,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := FindDiameter(tt.args.root); got != tt.want {
+				t.Errorf("FindDiameter() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestSumOfPathWMaxSum(t *testing.T) {
+	type args struct {
+		root *treeNode
+	}
+
+	input1 := treeNode{1, &treeNode{2, nil, nil}, &treeNode{3, nil, nil}}
+	input2 := treeNode{1, &treeNode{2, &treeNode{1, nil, nil}, &treeNode{3, nil, nil}}, &treeNode{3, &treeNode{5, &treeNode{7, nil, nil}, &treeNode{8, nil, nil}}, &treeNode{6, &treeNode{9, nil, nil}, nil}}}
+	input3 := treeNode{-1, &treeNode{-3, nil, nil}, nil}
+
+	tests := []struct {
+		name string
+		args args
+		want int
+	}{
+		{
+			name: "sanity",
+			args: args{root: &input1},
+			want: 6,
+		},
+		{
+			name: "sanity",
+			args: args{root: &input2},
+			want: 31,
+		},
+		{
+			name: "sanity",
+			args: args{root: &input3},
+			want: -1,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := SumOfPathWMaxSum(tt.args.root); got != tt.want {
+				t.Errorf("SumOfPathWMaxSum() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
