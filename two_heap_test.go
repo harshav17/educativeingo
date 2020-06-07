@@ -1,6 +1,7 @@
 package educativeingo
 
 import (
+	"reflect"
 	"testing"
 )
 
@@ -45,6 +46,31 @@ func TestMedianOfStream_FindMedian(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := tt.input.FindMedian(); got != tt.want {
 				t.Errorf("MedianOfStream.FindMedian() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestFindSlidingWindowMedian(t *testing.T) {
+	type args struct {
+		nums []int
+		k    int
+	}
+	tests := []struct {
+		name string
+		args args
+		want []float32
+	}{
+		{
+			name: "sanity",
+			args: args{nums: []int{1, 2, -1, 3, 5}, k: 2},
+			want: []float32{1.5, 0.5, 1.0, 4.0},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := FindSlidingWindowMedian(tt.args.nums, tt.args.k); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("FindSlidingWindowMedian() = %v, want %v", got, tt.want)
 			}
 		})
 	}

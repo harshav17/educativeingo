@@ -2,7 +2,6 @@ package educativeingo
 
 import (
 	"container/heap"
-	"fmt"
 )
 
 type minHeap []int
@@ -30,6 +29,16 @@ func (n *minHeap) Pop() interface{} {
 	return lastNode
 }
 
+//Find s a number from the heap
+func (n *minHeap) Find(num int) int {
+	for i, v := range *n {
+		if v == num {
+			return i
+		}
+	}
+	return -1
+}
+
 type maxHeap []int
 
 func (s maxHeap) Len() int {
@@ -52,8 +61,17 @@ func (s *maxHeap) Pop() interface{} {
 	heapSize := len(*s)
 	lastNode := (*s)[heapSize-1]
 	*s = (*s)[:heapSize-1]
-	fmt.Printf("popping %d \n", lastNode)
 	return lastNode
+}
+
+//Find s a number from the heap
+func (s *maxHeap) Find(num int) int {
+	for i, v := range *s {
+		if v == num {
+			return i
+		}
+	}
+	return -1
 }
 
 //MedianOfStream gives a median of stream
@@ -92,7 +110,55 @@ func (m *MedianOfStream) InsertNum(num int) {
 //FindMedian finds a median of stream of numbers
 func (m *MedianOfStream) FindMedian() float32 {
 	if m.max.Len() == m.min.Len() {
-		return float32((*m.max)[0])/float32(2) + float32((*m.min)[0])/float32(2)
+		return float32((*m.max)[0]+(*m.min)[0]) / float32(2)
 	}
 	return float32((*m.max)[0])
+}
+
+//FindSlidingWindowMedian finds a
+func FindSlidingWindowMedian(nums []int, k int) []float32 {
+	m := Constructor()
+	var results []float32
+	for i, v := range nums {
+		if m.max.Len() == 0 || (*m.max)[0] >= v {
+			heap.Push(m.max, v)
+		} else {
+			heap.Push(m.min, v)
+		}
+		rebalanceHeaps(&m)
+
+		if i-k+1 >= 0 {
+			if m.max.Len() == m.min.Len() {
+				results = append(results, float32((*m.max)[0]+(*m.min)[0])/float32(2))
+			} else {
+				results = append(results, float32((*m.max)[0]))
+			}
+
+			elemToBeRem := nums[i-k+1]
+			if elemToBeRem <= (*m.max)[0] {
+				//remove it from max heap
+				elemIndex := m.max.Find(elemToBeRem)
+				heap.Remove(m.max, elemIndex)
+			} else {
+				//remove it from min heap
+				elemIndex := m.min.Find(elemToBeRem)
+				heap.Remove(m.min, elemIndex)
+			}
+			rebalanceHeaps(&m)
+		}
+	}
+	return results
+}
+
+func rebalanceHeaps(m *MedianOfStream) {
+	if m.max.Len() > m.min.Len()+1 {
+		heap.Push(m.min, heap.Pop(m.max))
+	} else if m.max.Len() < m.min.Len() {
+		heap.Push(m.max, heap.Pop(m.min))
+	}
+}
+
+//FindMaxProfit finds max profit
+func FindMaxProfit(caps []int, profits []int, initCap int, numProjs int) {
+
 }
