@@ -247,3 +247,33 @@ func FindMaxProfit(caps []int, profits []int, initCap int, numProjs int) int {
 
 	return avCap
 }
+
+//FindNextInterval find all the next intervals
+func FindNextInterval(intervals [][]int) []int {
+	results := make([]int, len(intervals))
+	startMax := &profs{}
+	heap.Init(startMax)
+
+	endMax := &profs{}
+	heap.Init(endMax)
+
+	for i, v := range intervals {
+		heap.Push(startMax, prof{prof: v[0], index: i})
+		heap.Push(endMax, prof{prof: v[1], index: i})
+	}
+
+	for i := 0; i < len(intervals); i++ {
+		topEnd := heap.Pop(endMax).(prof)
+		results[topEnd.index] = -1
+		if (*startMax)[0].prof >= topEnd.prof {
+			topStart := heap.Pop(startMax).(prof)
+
+			for len(*startMax) > 0 && (*startMax)[0].prof >= topEnd.prof {
+				topStart = heap.Pop(startMax).(prof)
+			}
+			results[topEnd.index] = topStart.index
+			heap.Push(startMax, topStart)
+		}
+	}
+	return results
+}
