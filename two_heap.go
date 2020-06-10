@@ -158,7 +158,96 @@ func rebalanceHeaps(m *MedianOfStream) {
 	}
 }
 
-//FindMaxProfit finds max profit
-func FindMaxProfit(caps []int, profits []int, initCap int, numProjs int) {
+type cap struct {
+	cap   int
+	index int
+}
 
+type capss []cap
+
+func (c capss) Less(i, j int) bool {
+	return c[i].cap < c[j].cap
+}
+
+func (c capss) Len() int {
+	return len(c)
+}
+
+func (c capss) Swap(i, j int) {
+	c[i], c[j] = c[j], c[i]
+}
+
+func (c *capss) Pop() interface{} {
+	heapSize := len(*c)
+	lastNode := (*c)[heapSize-1]
+	*c = (*c)[:heapSize-1]
+	return lastNode
+}
+
+func (c *capss) Push(x interface{}) {
+	*c = append(*c, x.(cap))
+}
+
+//profits
+type prof struct {
+	prof  int
+	index int
+}
+
+type profs []prof
+
+func (p profs) Less(i, j int) bool {
+	return p[i].prof > p[j].prof
+}
+
+func (p profs) Len() int {
+	return len(p)
+}
+
+func (p profs) Swap(i, j int) {
+	p[i], p[j] = p[j], p[i]
+}
+
+func (p *profs) Push(x interface{}) {
+	*p = append(*p, x.(prof))
+}
+
+func (p *profs) Pop() interface{} {
+	heapSize := len(*p)
+	lastNode := (*p)[heapSize-1]
+	*p = (*p)[:heapSize-1]
+	return lastNode
+}
+
+//FindMaxProfit finds max profit
+func FindMaxProfit(caps []int, profits []int, initCap int, numProjs int) int {
+	min := &capss{}
+	heap.Init(min)
+	for i, v := range caps {
+		heap.Push(min, &cap{cap: v, index: i})
+	}
+
+	cap := initCap
+	maxProf := 0
+
+	for i := 0; i < numProjs; i++ {
+		max := &profs{}
+		heap.Init(max)
+		for _, v := range *min {
+			if v.cap > cap {
+				break
+			}
+			heap.Push(max, &prof{prof: profits[v.index], index: v.index})
+		}
+
+		if len(*max) == 0 {
+			break
+		}
+
+		best := (*max)[0]
+		maxProf += best.prof
+		cap -= caps[best.index]
+	}
+
+	return maxProf
 }

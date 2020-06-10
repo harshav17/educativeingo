@@ -75,3 +75,35 @@ func TestFindSlidingWindowMedian(t *testing.T) {
 		})
 	}
 }
+
+func TestFindMaxProfit(t *testing.T) {
+	type args struct {
+		caps     []int
+		profits  []int
+		initCap  int
+		numProjs int
+	}
+	tests := []struct {
+		name string
+		args args
+		want int
+	}{
+		{
+			name: "sanity",
+			args: args{
+				caps:     []int{0, 1, 2, 3},
+				profits:  []int{1, 2, 3, 5},
+				initCap:  0,
+				numProjs: 3,
+			},
+			want: 8,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := FindMaxProfit(tt.args.caps, tt.args.profits, tt.args.initCap, tt.args.numProjs); got != tt.want {
+				t.Errorf("FindMaxProfit() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
