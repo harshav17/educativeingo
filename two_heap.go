@@ -224,30 +224,26 @@ func FindMaxProfit(caps []int, profits []int, initCap int, numProjs int) int {
 	min := &capss{}
 	heap.Init(min)
 	for i, v := range caps {
-		heap.Push(min, &cap{cap: v, index: i})
+		heap.Push(min, cap{cap: v, index: i})
 	}
 
-	cap := initCap
-	maxProf := 0
+	avCap := initCap
 
 	for i := 0; i < numProjs; i++ {
 		max := &profs{}
 		heap.Init(max)
-		for _, v := range *min {
-			if v.cap > cap {
-				break
-			}
-			heap.Push(max, &prof{prof: profits[v.index], index: v.index})
+		for len(*min) > 0 && (*min)[0].cap <= avCap {
+			top := heap.Pop(min).(cap)
+			heap.Push(max, prof{prof: profits[top.index], index: top.index})
 		}
 
 		if len(*max) == 0 {
 			break
 		}
 
-		best := (*max)[0]
-		maxProf += best.prof
-		cap -= caps[best.index]
+		best := heap.Pop(max).(prof)
+		avCap += best.prof
 	}
 
-	return maxProf
+	return avCap
 }

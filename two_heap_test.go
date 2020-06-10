@@ -98,6 +98,16 @@ func TestFindMaxProfit(t *testing.T) {
 			},
 			want: 8,
 		},
+		{
+			name: "sanity",
+			args: args{
+				caps:     []int{0, 1, 2},
+				profits:  []int{1, 2, 3},
+				initCap:  1,
+				numProjs: 2,
+			},
+			want: 6,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
