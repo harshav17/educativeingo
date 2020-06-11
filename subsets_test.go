@@ -28,3 +28,27 @@ func TestFindSubsets(t *testing.T) {
 		})
 	}
 }
+
+func TestFindUniqueSubsets(t *testing.T) {
+	type args struct {
+		nums []int
+	}
+	tests := []struct {
+		name string
+		args args
+		want [][]int
+	}{
+		{
+			name: "sanity",
+			args: args{nums: []int{1, 3, 3}},
+			want: [][]int{{}, {1}, {3}, {1, 3}, {3, 3}, {1, 3, 3}},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := FindUniqueSubsets(tt.args.nums); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("FindUniqueSubsets() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
