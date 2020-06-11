@@ -36,6 +36,29 @@ func FindUniqueSubsets(nums []int) [][]int {
 
 //FindPermutations finds all permutations
 func FindPermutations(nums []int) [][]int {
-	results := [][]int{{}}
+	var results [][]int
+	permutations := [][]int{{}}
+	for _, v := range nums {
+		permLen := len(permutations)
+		for i := 0; i < permLen; i++ {
+			top := permutations[0]
+			permutations = permutations[1:]
+			for j := 0; j <= len(top); j++ {
+				newTop := top
+				newTop = append(newTop[:j], append([]int{v}, newTop[j:]...)...)
+				if len(newTop) == len(nums) {
+					results = append(results, newTop)
+				} else {
+					permutations = append(permutations, newTop)
+				}
+			}
+		}
+	}
+	return results
+}
+
+//FindPermutationsRecursive finds the above recursively
+func FindPermutationsRecursive(nums []int) [][]int {
+	var results [][]int
 	return results
 }
