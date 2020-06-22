@@ -1,6 +1,7 @@
 package educativeingo
 
-func cyclicSort(nums []int) []int {
+//CyclicSort performs cyclic sort
+func CyclicSort(nums []int) []int {
 	for i := 0; i < len(nums); {
 		v := nums[i] - 1
 		if nums[v] != nums[i] {
